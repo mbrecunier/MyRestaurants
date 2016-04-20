@@ -38,7 +38,7 @@ Java, Android Studio, Robolectric and Espresso for testing
 
 ### Legal
 
-Copyright (c) 2015 Michelle Brecunier
+Copyright (c) 2016 Michelle Brecunier
 
 This software is licensed under the MIT license.
 
