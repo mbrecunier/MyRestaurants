@@ -26,10 +26,6 @@ You will need the following programs installed on your computer.
 * Select the device you would like to emulate (Recommended: Nexus 6)
 * Select the API level you would like to run - click 'Download' if not available (Recommended: Marshmallow - ABI: x86)
 * Select configuration settings for emulator
- * Recommended:
- * Scale: 4dp on device = 1px on screen
- * Camera - Front: Webcam()
- * Camera - Back: Webcam()
 * Click 'Finish' and allow Emulator to run
 
 ## Technologies Used
