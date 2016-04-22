@@ -3,6 +3,7 @@ apply plugin: 'com.android.application'
 android {
     compileSdkVersion 23
     buildToolsVersion "23.0.3"
+    useLibrary 'org.apache.http.legacy'
 
     defaultConfig {
         applicationId "com.epicodus.myrestaurants"
@@ -33,6 +34,10 @@ repositories {
 }
 
 dependencies {
+    compile 'com.jakewharton:butterknife:7.0.1'
+    compile 'com.squareup.okhttp3:okhttp:3.2.0'
+    compile 'com.squareup.okhttp3:okhttp:3.1.2'
+    compile 'se.akerfeldt:okhttp-signpost:1.1.0'
     compile fileTree(dir: 'libs', include: ['*.jar'])
     testCompile 'junit:junit:4.12'
     compile 'com.android.support:appcompat-v7:23.2.1'
@@ -44,10 +49,4 @@ dependencies {
     androidTestCompile('com.android.support.test:runner:0.3') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
-    compile 'com.jakewharton:butterknife:7.0.1'
-    compile 'com.squareup.okhttp3:okhttp:3.2.0'
-    compile 'com.jakewharton.picasso:picasso2-okhttp3-downloader:1.0.2'
-    compile 'se.akerfeldt:okhttp-signpost:1.1.0'
-    compile 'com.squareup.okhttp3:okhttp:3.0.0-RC1'
-    compile 'oauth.signpost:signpost-core:1.2.1.2'
 }
