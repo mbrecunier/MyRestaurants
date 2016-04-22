@@ -3,6 +3,7 @@ package com.epicodus.myrestaurants;
 import android.content.Intent;
 import android.support.v7.app.AppCompatActivity;
 import android.os.Bundle;
+import android.util.Log;
 import android.view.View;
 import android.widget.AdapterView;
 import android.widget.ArrayAdapter;
@@ -10,7 +11,15 @@ import android.widget.ListView;
 import android.widget.TextView;
 import android.widget.Toast;
 
+import java.io.IOException;
+
+import javax.security.auth.callback.Callback;
+
+import okhttp3.Call;
+import okhttp3.Response;
+
 public class RestaurantsActivity extends AppCompatActivity {
+    public static final String TAG = RestaurantsActivity.class.getSimpleName();
     private TextView mLocationTextView;
     private ListView mListView;
     private String[] restaurants = new String[] {"Mi Mero Mole", "Mother's Bistro",
@@ -40,6 +49,27 @@ public class RestaurantsActivity extends AppCompatActivity {
 
         Intent intent = getIntent();
         String location = intent.getStringExtra("location");
-        mLocationTextView.setText("Here are all the restaurants near " + location);
+        getRestaurants(location);
+    }
+
+    private void getRestaurants(String location) {
+        YelpService.findRestaurants(location, new Callback() {
+//            @Override
+            public void onFailure(Call call, IOException e) {
+                e.printStackTrace();
+            }
+
+//            @Override
+            public void onResponse(Call call, Response response) throws IOException {
+                try {
+                    String jsonData = response.body().string();
+                    if (response.isSuccessful()) {
+                        Log.v(TAG, jsonData);
+                    }
+                } catch (IOException e) {
+                    e.printStackTrace();
+                }
+            }
+        });
     }
 }
