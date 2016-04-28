@@ -49,4 +49,5 @@ dependencies {
     androidTestCompile('com.android.support.test:runner:0.3') {
         exclude group: 'com.android.support', module: 'support-annotations'
     }
+    compile 'com.android.support:recyclerview-v7:+'
 }
