@@ -1,4 +1,4 @@
-package com.epicodus.myrestaurants;
+package com.epicodus.myrestaurants.ui;
 
 import android.content.Intent;
 import android.os.Bundle;
@@ -6,6 +6,10 @@ import android.support.v7.app.AppCompatActivity;
 import android.util.Log;
 import android.widget.ArrayAdapter;
 import android.widget.ListView;
+
+import com.epicodus.myrestaurants.R;
+import com.epicodus.myrestaurants.models.Restaurant;
+import com.epicodus.myrestaurants.services.YelpService;
 
 import java.io.IOException;
 import java.util.ArrayList;
@@ -19,8 +23,7 @@ import okhttp3.Callback;
 public class RestaurantsActivity extends AppCompatActivity {
     public ArrayList<Restaurant> mRestaurants = new ArrayList<>();
     public static final String TAG = RestaurantsActivity.class.getSimpleName();
-    @Bind(R.id.listView)
-    ListView mListView;
+    @Bind(R.id.listView) ListView mListView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
