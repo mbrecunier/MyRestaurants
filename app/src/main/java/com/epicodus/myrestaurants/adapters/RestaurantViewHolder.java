@@ -10,6 +10,7 @@ import android.widget.TextView;
 import com.epicodus.myrestaurants.R;
 import com.epicodus.myrestaurants.models.Restaurant;
 import com.epicodus.myrestaurants.ui.RestaurantDetailActivity;
+import com.epicodus.myrestaurants.util.ItemTouchHelperViewHolder;
 import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
@@ -22,7 +23,7 @@ import butterknife.ButterKnife;
 /**
  * Created by Guest on 5/2/16.
  */
-public class RestaurantViewHolder extends RecyclerView.ViewHolder {
+public class RestaurantViewHolder extends RecyclerView.ViewHolder implements ItemTouchHelperViewHolder {
     private ArrayList<Restaurant> mRestaurants = new ArrayList<>();
     @Bind(R.id.restaurantImageView) ImageView mRestaurantImageView;
     @Bind(R.id.restaurantNameTextView) TextView mNameTextView;
@@ -60,5 +61,22 @@ public class RestaurantViewHolder extends RecyclerView.ViewHolder {
         mNameTextView.setText(restaurant.getName());
         mCategoryTextView.setText(restaurant.getCategories().get(0));
         mRatingTextView.setText("Rating: " + restaurant.getRating() + "/5");
+    }
+
+    @Override
+    public void onItemSelected() {
+        itemView.animate()
+                .alpha(0.7f)
+                .scaleX(0.9f)
+                .scaleY(0.9f)
+                .setDuration(500);
+    }
+
+    @Override
+    public void onItemClear() {
+        itemView.animate()
+                .alpha(1f)
+                .scaleX(1f)
+                .scaleY(1f);
     }
 }
