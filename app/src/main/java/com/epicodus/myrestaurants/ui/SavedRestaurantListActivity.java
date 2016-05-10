@@ -20,59 +20,11 @@ import com.firebase.client.Query;
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
-public class SavedRestaurantListActivity extends AppCompatActivity implements OnStartDragListener {
-    private Query mQuery;
-    private Firebase mFirebaseRestaurantsRef;
-    private FirebaseRestaurantListAdapter mAdapter;
-    private SharedPreferences mSharedPreferences;
-    private ItemTouchHelper mItemTouchHelper;
-
-    @Bind(R.id.recyclerView)
-    RecyclerView mRecyclerView;
+public class SavedRestaurantListActivity extends AppCompatActivity {
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        setContentView(R.layout.activity_restaurants);
-        ButterKnife.bind(this);
-
-        mFirebaseRestaurantsRef = new Firebase(Constants.FIREBASE_URL_RESTAURANTS);
-        mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(this);
-
-        setUpFirebaseQuery();
-        setUpRecyclerView();
-    }
-
-    private void setUpFirebaseQuery() {
-        String uid = mSharedPreferences.getString(Constants.KEY_UID, null);
-        String location = mFirebaseRestaurantsRef.child(uid).toString();
-        mQuery = new Firebase(location).orderByChild("index");
-    }
-
-    private void setUpRecyclerView() {
-        mAdapter = new FirebaseRestaurantListAdapter(mQuery, Restaurant.class, this);
-        mRecyclerView.setLayoutManager(new LinearLayoutManager(this));
-        mRecyclerView.setAdapter(mAdapter);
-        ItemTouchHelper.Callback callback = new SimpleItemTouchHelperCallback(mAdapter);
-        mItemTouchHelper = new ItemTouchHelper(callback);
-        mItemTouchHelper.attachToRecyclerView(mRecyclerView);
-    }
-
-    @Override
-    public void onStartDrag(RecyclerView.ViewHolder viewHolder) {
-        mItemTouchHelper.startDrag(viewHolder);
-    }
-
-    @Override
-    protected void onPause() {
-        super.onPause();
-        String uid = mSharedPreferences.getString(Constants.KEY_UID, null);
-        for (Restaurant restaurant : mAdapter.getItems()) {
-            String pushID = restaurant.getPushId();
-            restaurant.setIndex(Integer.toString(mAdapter.getItems().indexOf(restaurant)));
-            mFirebaseRestaurantsRef.child(uid)
-                    .child(pushID)
-                    .setValue(restaurant);
-        }
+        setContentView(R.layout.activity_saved_restaurant_list);
     }
 }
