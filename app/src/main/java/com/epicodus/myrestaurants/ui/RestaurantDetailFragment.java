@@ -23,6 +23,8 @@ import com.squareup.picasso.Picasso;
 
 import org.parceler.Parcels;
 
+import java.util.ArrayList;
+
 import butterknife.Bind;
 import butterknife.ButterKnife;
 
@@ -30,7 +32,7 @@ import butterknife.ButterKnife;
 public class RestaurantDetailFragment extends Fragment implements View.OnClickListener {
     private static final int MAX_WIDTH = 400;
     private static final int MAX_HEIGHT = 300;
-    private SharedPreferences mSharedPreferences;
+
     @Bind(R.id.restaurantImageView) ImageView mImageLabel;
     @Bind(R.id.restaurantNameTextView) TextView mNameLabel;
     @Bind(R.id.cuisineTextView) TextView mCategoriesLabel;
@@ -41,11 +43,15 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
     @Bind(R.id.saveRestaurantButton) TextView mSaveRestaurantButton;
 
     private Restaurant mRestaurant;
+    private SharedPreferences mSharedPreferences;
+    private Integer mPosition;
+    private ArrayList<Restaurant> mRestaurants;
 
-    public static RestaurantDetailFragment newInstance(Restaurant restaurant) {
+    public static RestaurantDetailFragment newInstance(ArrayList<Restaurant> restaurants, Integer position) {
         RestaurantDetailFragment restaurantDetailFragment = new RestaurantDetailFragment();
         Bundle args = new Bundle();
-        args.putParcelable("restaurant", Parcels.wrap(restaurant));
+        args.putParcelable(Constants.EXTRA_KEY_RESTAURANTS, Parcels.wrap(restaurants));
+        args.putInt(Constants.EXTRA_KEY_POSITION, position);
         restaurantDetailFragment.setArguments(args);
         return restaurantDetailFragment;
     }
@@ -53,20 +59,24 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
     @Override
     public void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
-        mRestaurant = Parcels.unwrap(getArguments().getParcelable("restaurant"));
+        mRestaurants = Parcels.unwrap(getArguments().getParcelable(Constants.EXTRA_KEY_RESTAURANTS));
         mSharedPreferences = PreferenceManager.getDefaultSharedPreferences(getActivity());
+        mPosition = getArguments().getInt(Constants.EXTRA_KEY_POSITION);
+        mRestaurant = mRestaurants.get(mPosition);
     }
 
     @Override
     public View onCreateView(LayoutInflater inflater, ViewGroup container, Bundle savedInstanceState) {
         View view = inflater.inflate(R.layout.fragment_restaurant_detail, container, false);
         ButterKnife.bind(this, view);
+        mSaveRestaurantButton.setOnClickListener(this);
 
         Picasso.with(view.getContext())
                 .load(mRestaurant.getImageUrl())
                 .resize(MAX_WIDTH, MAX_HEIGHT)
                 .centerCrop()
                 .into(mImageLabel);
+
         mNameLabel.setText(mRestaurant.getName());
         mCategoriesLabel.setText(android.text.TextUtils.join(", ", mRestaurant.getCategories()));
         mRatingLabel.setText(Double.toString(mRestaurant.getRating()) + "/5");
@@ -76,8 +86,6 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
         mWebsiteLabel.setOnClickListener(this);
         mPhoneLabel.setOnClickListener(this);
         mAddressLabel.setOnClickListener(this);
-        mSaveRestaurantButton.setOnClickListener(this);
-
 
         return view;
     }
@@ -102,7 +110,6 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
             startActivity(mapIntent);
         }
         if (v == mSaveRestaurantButton) {
-            Firebase ref = new Firebase(Constants.FIREBASE_URL_RESTAURANTS);
             String userUid = mSharedPreferences.getString(Constants.KEY_UID, null);
             Firebase userRestaurantsFirebaseRef = new Firebase(Constants.FIREBASE_URL_RESTAURANTS).child(userUid);
             Firebase pushRef = userRestaurantsFirebaseRef.push();
@@ -112,5 +119,4 @@ public class RestaurantDetailFragment extends Fragment implements View.OnClickLi
             Toast.makeText(getContext(), "Saved", Toast.LENGTH_SHORT).show();
         }
     }
-
 }
